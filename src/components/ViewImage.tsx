@@ -7,28 +7,53 @@ import {
   Row,
   Form,
   Button,
+  Badge,
 } from "react-bootstrap"
 import { useParams } from "react-router-dom"
-import nature from "../assets/nature.jpg"
+import { Photo, getImageById, addCommentOnImage } from "../api/backend"
 
 interface RouteParams {
   photoId: string
 }
 
-const FAKE_COMMENTS = [
-  "First!",
-  "Not last",
-  "Very nice picture",
-  "Splendid saturation!",
-]
+const EmptyPhoto: Photo = {
+  uri: "",
+  comments: [],
+}
 
 const ViewImage: React.FC = () => {
   const { photoId } = useParams<RouteParams>()
-  const [comments, setComments] = useState<string[]>([])
+  const [photo, setPhoto] = useState<Photo>(EmptyPhoto)
+  const [newComment, setNewComment] = useState("")
+
+  const onAddComment = async (e: React.FormEvent) => {
+    // required to avoid a reload that aborts the request
+    e.preventDefault()
+
+    try {
+      await addCommentOnImage(photoId, newComment)
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setNewComment("")
+    }
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewComment(e.target.value)
+  }
 
   useEffect(() => {
-    setComments(FAKE_COMMENTS)
-  }, [])
+    const fetchImage = async () => {
+      try {
+        const p = await getImageById(photoId)
+        setPhoto(p)
+      } catch (err) {
+        console.error(err)
+      }
+    }
+    fetchImage()
+  }, [photoId])
 
   return (
     <Container className="p-5 mb-2 bg-light text-dark">
@@ -39,17 +64,20 @@ const ViewImage: React.FC = () => {
       </Row>
       <Row className="text-center">
         <Col>
-          <Image className="image-class-name" src={nature} />
+          <Image className="image-class-name w-100" src={photo.uri} />
         </Col>
       </Row>
       <Row className="p-3 mt-5">
         <Col>
           <h4>Comments (displaying last five)</h4>
           <div className="pt-3">
-            {comments.map((comment, idx) => {
+            {photo.comments.map((comment, idx) => {
               return (
                 <Alert key={idx} className="p-3 text-dark" variant="secondary">
-                  {comment}
+                  <Badge variant="secondary" className="mr-2 p-2">
+                    {comment.datetime}
+                  </Badge>
+                  {comment.text}
                 </Alert>
               )
             })}
@@ -57,9 +85,13 @@ const ViewImage: React.FC = () => {
         </Col>
         <Col>
           <h4>Add a new comment</h4>
-          <Form className="pt-3">
-            <Form.Group controlId="formBasicEmail">
-              <Form.Control placeholder="Enter your comment ..." />
+          <Form className="pt-3" onSubmit={onAddComment}>
+            <Form.Group>
+              <Form.Control
+                placeholder="Enter your comment ..."
+                type="text"
+                onChange={handleChange}
+              />
             </Form.Group>
             <Button variant="primary" type="submit" size="lg" block>
               Submit comment
