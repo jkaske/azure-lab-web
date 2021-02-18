@@ -53,11 +53,8 @@ export const getImageById = async (imageId: string): Promise<Photo> => {
   return body
 }
 
-export const addNewImage = async (formData: FormData): Promise<void> => {
-  const res = await postImageRequest(
-    `${environment.api.baseUrl}/images`,
-    formData
-  )
+export const uploadImage = async (file: File): Promise<void> => {
+  const res = await postImageRequest(`${environment.api.baseUrl}/images`, file)
 }
 
 export const addCommentOnImage = async (
@@ -86,10 +83,10 @@ const postRequest = (url: string, body: unknown): Promise<Response> => {
   })
 }
 
-const postImageRequest = (url: string, body: FormData): Promise<Response> => {
+const postImageRequest = (url: string, body: File): Promise<Response> => {
   return send(url, {
     method: "POST",
-    headers: { "content-type": "image/jpeg" },
+    headers: { "content-type": "application/octet-stream" },
     body,
   })
 }

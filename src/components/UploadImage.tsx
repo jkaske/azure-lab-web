@@ -1,59 +1,58 @@
 import React, { useState } from "react"
-import { Button, Form } from "react-bootstrap"
-import { addNewImage } from "../api/backend"
+import { Button } from "react-bootstrap"
+import { uploadImage } from "../api/backend"
 
 const UploadImage: React.FC = () => {
-  const [selectedFile, setSelectedFile] = useState<File>()
+  const [file, setFile] = useState<File>()
 
-  const onFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault()
-    const fileList = event.target.files
-    if (!fileList) return
-    // setSelectedFile(fileList[0])
 
-    const formData = new FormData()
-    formData.append("0", fileList[0])
-
-    await addNewImage(formData)
+    if (event.target.files && event.target.files.length > 0) {
+      setFile(event.target.files[0])
+    }
   }
 
-  const onSubmitForm = async (e: React.FormEvent) => {
-    // required to avoid a reload that aborts the request
-    e.preventDefault()
+  const handleClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
 
-    if (selectedFile) {
-      const formData = new FormData()
-
-      formData.append("name", selectedFile.name)
-      formData.append("file", selectedFile)
-
+    if (file) {
       try {
-        await addNewImage(formData)
+        await uploadImage(file)
       } catch (err) {
-        console.error(err)
+        console.log(err)
       }
     }
   }
 
   return (
     <div className="p-5 mb-2 bg-light text-dark">
-      <Form onSubmit={onSubmitForm}>
-        <h2>Upload a new photo</h2>
-        <Form.Group>
+      <div className="input-group">
+        <div className="custom-file">
           <input
-            accept="image/jpeg"
-            className="form-control form-control-lg"
-            id="photo"
-            name="photo"
-            multiple={false}
             type="file"
-            onChange={onFileChange}
+            className="custom-file-input"
+            id="inputGroupFile01"
+            multiple={false}
+            onChange={handleChange}
           />
-        </Form.Group>
-        <Button type="submit" variant="secondary" size="lg" block>
+          <label className="custom-file-label" htmlFor="inputGroupFile01">
+            {file ? file.name : "Choose a .jpg photo to upload"}
+          </label>
+        </div>
+      </div>
+      <div className="input-group-prepend">
+        <Button
+          type="submit"
+          id="inputGroupFileAddon01"
+          variant="secondary"
+          size="lg"
+          block
+          onClick={handleClick}
+        >
           Submit photo
         </Button>
-      </Form>
+      </div>
     </div>
   )
 }

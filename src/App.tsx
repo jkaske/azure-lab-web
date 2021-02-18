@@ -4,24 +4,9 @@ import { Container, Row, Col } from "react-bootstrap"
 import DisplayThumbnails from "./components/DisplayThumbnails"
 import { BrowserRouter, Switch, Route, Link } from "react-router-dom"
 import ViewImage from "./components/ViewImage"
-import { Joke, getJoke } from "./api/backend"
+import ThisComponentIsAJoke from "./components/Joke"
 
 const App: React.FC = () => {
-  const [joke, setJoke] = useState<Joke>({ text: "Loading a joke ..." })
-
-  useEffect(() => {
-    const getNewJoke = async () => {
-      try {
-        const j = await getJoke()
-        setJoke(j)
-      } catch (err) {
-        setJoke({ text: "Implement /joke endpoint to view a joke here" })
-      }
-    }
-
-    getNewJoke()
-  }, [])
-
   return (
     <BrowserRouter>
       <Container fluid className="w-75">
@@ -36,9 +21,7 @@ const App: React.FC = () => {
         </Row>
         <Row>
           <Col>
-            <blockquote className="blockquote text-center pb-5">
-              <p>{joke ? joke.text : ""}</p>
-            </blockquote>
+            <ThisComponentIsAJoke />
           </Col>
         </Row>
         <Switch>
