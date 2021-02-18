@@ -1,11 +1,13 @@
 import React, { useState } from "react"
 import { Button } from "react-bootstrap"
-import { uploadImage } from "../api/backend"
+import { uploadImageAsFile, uploadImageAsBase64 } from "../api/backend"
 
 const UploadImage: React.FC = () => {
   const [file, setFile] = useState<File>()
+  const [uploadAsBase64, setUploadAsBase64] = useState<boolean>(false)
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    // required to avoid a reload that aborts the request
     event.preventDefault()
 
     if (event.target.files && event.target.files.length > 0) {
@@ -14,11 +16,16 @@ const UploadImage: React.FC = () => {
   }
 
   const handleClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    // required to avoid a reload that aborts the request
     event.preventDefault()
 
     if (file) {
       try {
-        await uploadImage(file)
+        if (uploadAsBase64) {
+          await uploadImageAsBase64(file)
+        } else {
+          await uploadImageAsFile(file)
+        }
       } catch (err) {
         console.log(err)
       }
@@ -40,6 +47,17 @@ const UploadImage: React.FC = () => {
             {file ? file.name : "Choose a .jpg photo to upload"}
           </label>
         </div>
+      </div>
+      <div className="form-check pt-3 pb-3">
+        <input
+          className="form-check-input"
+          type="checkbox"
+          value=""
+          id="flexCheckDefault"
+          checked={uploadAsBase64}
+          onChange={() => setUploadAsBase64(!uploadAsBase64)}
+        />
+        <label className="form-check-label">Upload image as base64</label>
       </div>
       <div className="input-group-prepend">
         <Button

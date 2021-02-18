@@ -20,7 +20,7 @@ export interface Joke {
 }
 
 export const getJoke = async (): Promise<Joke> => {
-  const res = await getRequest(`${environment.api.baseUrl}/joke`)
+  const res = await getRequest(`${environment.baseUrl}/joke`)
 
   if (res.status !== 200) {
     throw new Error("Could not get joke (no pun intended)")
@@ -31,7 +31,7 @@ export const getJoke = async (): Promise<Joke> => {
 }
 
 export const getThumbnails = async (): Promise<Thumbnail[]> => {
-  const res = await getRequest(`${environment.api.baseUrl}/thumbnails`)
+  const res = await getRequest(`${environment.baseUrl}/thumbnails`)
 
   if (res.status !== 200) {
     throw new Error("Could not get thumbnails")
@@ -42,7 +42,7 @@ export const getThumbnails = async (): Promise<Thumbnail[]> => {
 }
 
 export const getImageById = async (imageId: string): Promise<Photo> => {
-  const res = await getRequest(`${environment.api.baseUrl}/images/${imageId}`)
+  const res = await getRequest(`${environment.baseUrl}/images/${imageId}`)
 
   if (res.status !== 200) {
     throw new Error("Could not fetch image details")
@@ -53,8 +53,36 @@ export const getImageById = async (imageId: string): Promise<Photo> => {
   return body
 }
 
-export const uploadImage = async (file: File): Promise<void> => {
-  const res = await postImageRequest(`${environment.api.baseUrl}/images`, file)
+export const uploadImageAsFile = async (file: File): Promise<void> => {
+  const res = await postImageRequest(`${environment.baseUrl}/images`, file)
+
+  if (res.status !== 201) {
+    throw new Error("Could not upload image")
+  }
+}
+
+export const uploadImageAsBase64 = async (file: File): Promise<void> => {
+  const b64 = await file2Base64(file)
+
+  const body = {
+    data: b64,
+  }
+
+  const res = await postRequest(`${environment.baseUrl}/images`, body)
+
+  if (res.status !== 201) {
+    throw new Error("Could not upload image")
+  }
+}
+
+const file2Base64 = (file: File): Promise<string> => {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () =>
+      resolve(reader.result ? reader.result.toString() : "fail")
+    reader.onerror = (error) => reject(error)
+  })
 }
 
 export const addCommentOnImage = async (
@@ -66,7 +94,7 @@ export const addCommentOnImage = async (
   }
 
   const res = await postRequest(
-    `${environment.api.baseUrl}/images/${imageId}/comments`,
+    `${environment.baseUrl}/images/${imageId}/comments`,
     body
   )
 

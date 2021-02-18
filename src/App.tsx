@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import UploadImage from "./components/UploadImage"
 import { Container, Row, Col } from "react-bootstrap"
 import DisplayThumbnails from "./components/DisplayThumbnails"
