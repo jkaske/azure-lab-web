@@ -10,7 +10,7 @@ import {
   Badge,
 } from "react-bootstrap"
 import { useParams } from "react-router-dom"
-import { Photo, getImageById, addCommentOnImage } from "../api/backend"
+import { Photo, getImageById, addCommentOnImage, Comment } from "../api/backend"
 
 interface RouteParams {
   photoId: string
@@ -25,6 +25,7 @@ const ViewImage: React.FC = () => {
   const { photoId } = useParams<RouteParams>()
   const [photo, setPhoto] = useState<Photo>(EmptyPhoto)
   const [newComment, setNewComment] = useState("")
+  const [comments, setComments] = useState<Comment[]>([])
 
   const onAddComment = async (e: React.FormEvent) => {
     // required to avoid a reload that aborts the request
@@ -32,6 +33,10 @@ const ViewImage: React.FC = () => {
 
     try {
       await addCommentOnImage(photoId, newComment)
+      setComments([
+        ...comments,
+        { text: newComment, datetime: new Date().toISOString() },
+      ])
     } catch (err) {
       console.error(err)
     } finally {
@@ -48,6 +53,7 @@ const ViewImage: React.FC = () => {
       try {
         const p = await getImageById(photoId)
         setPhoto(p)
+        setComments(p.comments)
       } catch (err) {
         console.error(err)
       }
@@ -71,7 +77,7 @@ const ViewImage: React.FC = () => {
         <Col>
           <h4>Comments (displaying last five)</h4>
           <div className="pt-3">
-            {photo.comments.map((comment, idx) => {
+            {comments.map((comment, idx) => {
               return (
                 <Alert key={idx} className="p-3 text-dark" variant="secondary">
                   <Badge variant="secondary" className="mr-2 p-2">

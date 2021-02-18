@@ -21,7 +21,10 @@ const DisplayThumbnails: React.FC = () => {
   return (
     <div className="p-5 mb-2 bg-light text-dark">
       <h2>My photos</h2>
-      <p className="fw-lighter">Click on a photo to view comments</p>
+      <p className="fw-lighter">
+        Click on a photo to view larger size and read comments. Reload page to
+        update list.
+      </p>
       <Row>
         <Col className="text-center">
           {thumbnails.map((thumbnail, idx) => {
@@ -38,6 +41,3 @@ const DisplayThumbnails: React.FC = () => {
 }
 
 export default DisplayThumbnails
-
-// https://azure101apipython.blob.core.windows.net/thumbnails/c5e7593a-ae46-456d-a098-798b30bcdf73.jpg
-// https://azure101apipython.blob.core.windows.net/thumbnails/c5e7593a-ae46-456d-a098-798b30bcdf73.jpg

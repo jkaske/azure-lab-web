@@ -15,6 +15,21 @@ export interface Comment {
   text: string
 }
 
+export interface Joke {
+  text: string
+}
+
+export const getJoke = async (): Promise<Joke> => {
+  const res = await getRequest(`${environment.api.baseUrl}/joke`)
+
+  if (res.status !== 200) {
+    throw new Error("Could not get joke (no pun intended)")
+  }
+
+  const body = await res.json()
+  return body
+}
+
 export const getThumbnails = async (): Promise<Thumbnail[]> => {
   const res = await getRequest(`${environment.api.baseUrl}/thumbnails`)
 
