@@ -3,7 +3,7 @@ export interface Environment {
 }
 
 const prod: Environment = {
-  baseUrl: "https://azure-101-api-python.azurewebsites.net",
+  baseUrl: "https://azure-101-3fdzbz2h4aank.azurewebsites.net",
 }
 
 export const environment: Environment = prod

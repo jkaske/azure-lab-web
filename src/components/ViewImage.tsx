@@ -26,7 +26,7 @@ const ViewImage: React.FC = () => {
   const [photo, setPhoto] = useState<Photo>(EmptyPhoto)
   const [newComment, setNewComment] = useState("")
   const [comments, setComments] = useState<Comment[]>([])
-  const [showError, setShowError] = useState(true)
+  const [showError, setShowError] = useState(false)
 
   const onAddComment = async (e: React.FormEvent) => {
     // required to avoid a reload that aborts the request
