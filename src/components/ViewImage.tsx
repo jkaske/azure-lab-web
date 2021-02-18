@@ -26,6 +26,7 @@ const ViewImage: React.FC = () => {
   const [photo, setPhoto] = useState<Photo>(EmptyPhoto)
   const [newComment, setNewComment] = useState("")
   const [comments, setComments] = useState<Comment[]>([])
+  const [showError, setShowError] = useState(true)
 
   const onAddComment = async (e: React.FormEvent) => {
     // required to avoid a reload that aborts the request
@@ -39,6 +40,7 @@ const ViewImage: React.FC = () => {
       ])
     } catch (err) {
       console.error(err)
+      setShowError(true)
     } finally {
       setNewComment("")
     }
@@ -66,6 +68,21 @@ const ViewImage: React.FC = () => {
       <Row className="text-center">
         <Col>
           <h3>{photoId}.jpg</h3>
+          {showError && (
+            <>
+              <Alert
+                variant="danger"
+                onClose={() => setShowError(false)}
+                dismissible
+              >
+                <Alert.Heading>Oh snap! Could not fetch photo!</Alert.Heading>
+                <p>
+                  Have you implemented the GET /photo/id function? Maybe the
+                  photo does not exist in your storage?
+                </p>
+              </Alert>
+            </>
+          )}
         </Col>
       </Row>
       <Row className="text-center">

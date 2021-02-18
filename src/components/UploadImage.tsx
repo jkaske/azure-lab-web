@@ -1,10 +1,11 @@
 import React, { useState } from "react"
-import { Button } from "react-bootstrap"
+import { Alert, Button } from "react-bootstrap"
 import { uploadImageAsFile, uploadImageAsBase64 } from "../api/backend"
 
 const UploadImage: React.FC = () => {
   const [file, setFile] = useState<File>()
   const [uploadAsBase64, setUploadAsBase64] = useState<boolean>(false)
+  const [showError, setShowError] = useState(false)
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     // required to avoid a reload that aborts the request
@@ -28,12 +29,27 @@ const UploadImage: React.FC = () => {
         }
       } catch (err) {
         console.log(err)
+        setShowError(true)
       }
     }
   }
 
   return (
     <div className="p-5 mb-2 bg-light text-dark">
+      <div>
+        {showError && (
+          <>
+            <Alert
+              variant="danger"
+              onClose={() => setShowError(false)}
+              dismissible
+            >
+              <Alert.Heading>Oh snap! Could not upload photo!</Alert.Heading>
+              <p>Have you implemented the POST /images backend function?</p>
+            </Alert>
+          </>
+        )}
+      </div>
       <div className="input-group">
         <div className="custom-file">
           <input

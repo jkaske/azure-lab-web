@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react"
-import { Col, Image, Row } from "react-bootstrap"
+import { Alert, Col, Image, Row } from "react-bootstrap"
 import { Link } from "react-router-dom"
 import { Thumbnail, getThumbnails } from "../api/backend"
 
 const DisplayThumbnails: React.FC = () => {
   const [thumbnails, setThumbnails] = useState<Thumbnail[]>([])
+  const [showError, setShowError] = useState(false)
 
   useEffect(() => {
     const fetchThumbnails = async () => {
@@ -13,6 +14,7 @@ const DisplayThumbnails: React.FC = () => {
         setThumbnails(t)
       } catch (err) {
         console.error(err)
+        setShowError(true)
       }
     }
     fetchThumbnails()
@@ -27,6 +29,20 @@ const DisplayThumbnails: React.FC = () => {
       </p>
       <Row>
         <Col className="text-center">
+          {showError && (
+            <>
+              <Alert
+                variant="danger"
+                onClose={() => setShowError(false)}
+                dismissible
+              >
+                <Alert.Heading>
+                  Oh snap! Could not fetch thumbnails!
+                </Alert.Heading>
+                <p>Have you implemented the thumbnail backend function?</p>
+              </Alert>
+            </>
+          )}
           {thumbnails.map((thumbnail, idx) => {
             return (
               <Link to={`/photo/${thumbnail.id}`} key={idx}>
