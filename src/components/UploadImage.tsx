@@ -27,6 +27,7 @@ const UploadImage: React.FC = () => {
         } else {
           await uploadImageAsFile(file)
         }
+        setShowError(false)
       } catch (err) {
         console.log(err)
         setShowError(true)
