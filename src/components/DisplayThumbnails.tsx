@@ -46,7 +46,7 @@ const DisplayThumbnails: React.FC = () => {
           {thumbnails.map((thumbnail, idx) => {
             return (
               <Link to={`/photo/${thumbnail.id}`} key={idx}>
-                <Image src={thumbnail.thumbnail} width="200" thumbnail />
+                <Image src={thumbnail.uri} width="200" thumbnail />
               </Link>
             )
           })}

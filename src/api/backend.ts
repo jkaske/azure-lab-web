@@ -2,7 +2,7 @@ import { environment } from "../environment"
 
 export interface Thumbnail {
   id: string
-  thumbnail: string
+  uri: string
 }
 
 export interface Photo {

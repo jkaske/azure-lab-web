@@ -3,7 +3,8 @@ export interface Environment {
 }
 
 const prod: Environment = {
-  baseUrl: "https://azure-101-3fdzbz2h4aank.azurewebsites.net",
+  baseUrl: "http://localhost:7071",
+  // baseUrl: "https://azure-101-2hf5m6vfzm67s.azurewebsites.net",
 }
 
 export const environment: Environment = prod
