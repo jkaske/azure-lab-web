@@ -67,7 +67,7 @@ const ViewImage: React.FC = () => {
     <Container className="p-5 mb-2 bg-light text-dark">
       <Row className="text-center">
         <Col>
-          <h3>{photoId}.jpg</h3>
+          <h3>{photoId}</h3>
           {showError && (
             <>
               <Alert
