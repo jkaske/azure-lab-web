@@ -17,7 +17,12 @@ const DisplayThumbnails: React.FC = () => {
         setShowError(true)
       }
     }
-    fetchThumbnails()
+
+    const interval = setInterval(() => {
+      fetchThumbnails()
+    }, 5000)
+
+    return () => clearInterval(interval)
   }, [])
 
   return (
