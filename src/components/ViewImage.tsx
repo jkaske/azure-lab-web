@@ -55,7 +55,7 @@ const ViewImage: React.FC = () => {
       try {
         const p = await getImageById(photoId)
         setPhoto(p)
-        setComments(p.comments)
+        setComments(p.comments.length > 0 ? p.comments : [])
       } catch (err) {
         console.error(err)
       }
@@ -92,7 +92,7 @@ const ViewImage: React.FC = () => {
       </Row>
       <Row className="p-3 mt-5">
         <Col>
-          <h4>Comments (displaying last five)</h4>
+          <h4>Comments</h4>
           <div className="pt-3">
             {comments.map((comment, idx) => {
               return (

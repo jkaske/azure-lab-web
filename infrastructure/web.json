@@ -140,9 +140,9 @@
     }
   ],
   "outputs": {
-    "webStorageAccountName": {
+    "websiteUrl": {
       "type": "string",
-      "value": "[parameters('storageAccountName')]"
+      "value": "[reference(parameters('storageAccountName')).primaryEndpoints.web]"
     }
   }
 }
