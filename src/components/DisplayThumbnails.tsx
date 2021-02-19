@@ -12,6 +12,7 @@ const DisplayThumbnails: React.FC = () => {
       try {
         const t = await getThumbnails()
         setThumbnails(t)
+        setShowError(false)
       } catch (err) {
         console.error(err)
         setShowError(true)
