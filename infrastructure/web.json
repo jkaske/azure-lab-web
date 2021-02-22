@@ -16,35 +16,11 @@
         "description": "Name of the storage account that will host the website"
       }
     },
-    "storageAccountSKU": {
-      "type": "string",
-      "allowedValues": [
-        "Standard_LRS",
-        "Standard_GRS",
-        "Standard_ZRS",
-        "Premium_LRS"
-      ],
-      "metadata": {
-        "description": "Storage account pricing tier"
-      }
-    },
     "cdnProfileName": {
       "type": "string",
       "defaultValue": "[concat('profile', uniquestring(resourceGroup().id))]",
       "metadata": {
         "description": "Name of the CDN profile."
-      }
-    },
-    "cdnSKU": {
-      "type": "string",
-      "allowedValues": [
-        "Standard_Verizon",
-        "Standard_Akamai",
-        "Standard_Microsoft",
-        "Premium_Verizon"
-      ],
-      "metadata": {
-        "description": "Pricing tier of the CDN Profile."
       }
     },
     "cdnEndpointName": {
@@ -65,7 +41,7 @@
       "name": "[parameters('storageAccountName')]",
       "location": "[parameters('location')]",
       "sku": {
-        "name": "[parameters('storageAccountSKU')]"
+        "name": "Standard_LRS"
       },
       "kind": "StorageV2",
       "properties": {}
@@ -76,7 +52,7 @@
       "name": "[parameters('cdnProfileName')]",
       "location": "[parameters('location')]",
       "sku": {
-        "name": "[parameters('cdnSKU')]"
+        "name": "Standard_Microsoft"
       },
       "properties": {}
     },
