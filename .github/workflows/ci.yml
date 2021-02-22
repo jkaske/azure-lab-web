@@ -11,7 +11,6 @@ jobs:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
         node: [
-            12.x, # Used by Function Apps
             14.x, # Node.js LTS
             15.x, # Node.js current
           ]
