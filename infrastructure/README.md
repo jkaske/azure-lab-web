@@ -8,8 +8,7 @@
 
 ## Deploy the web infrastructure
 
-1. If desired, edit the default values in `web.parameters.json`. These two parameters control the pricing tiers of the storage account and the CDN, respectively
-2. Run the CLI command below to deploy the template
+1. Run the CLI command below to deploy the template
 
 ```bash
 az deployment group create \
@@ -20,7 +19,7 @@ az deployment group create \
     --parameters @web.parameters.json
 ```
 
-3. Fetch the website URL from the deployment output, you will need this website URL to configure CORS for the backend later.
+2. Fetch the website URL from the deployment output, you will need this website URL to configure CORS for the backend later.
 
 ```
 az deployment group show \
