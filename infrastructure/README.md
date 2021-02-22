@@ -15,8 +15,7 @@ az deployment group create \
     --name <the deployment name> \
     --subscription <subscription name or id> \
     --resource-group <resource group name> \
-    --template-file web.json \
-    --parameters @web.parameters.json
+    --template-file web.json
 ```
 
 2. Fetch the website URL from the deployment output, you will need this website URL to configure CORS for the backend later.
