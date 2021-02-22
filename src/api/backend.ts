@@ -81,12 +81,12 @@ const file2Base64 = (file: File): Promise<string> => {
     reader.readAsDataURL(file)
     reader.onload = () => {
       const result = reader.result
-       ? reader.result.toString().replace("data:", "").replace(/^.+,/, "")
-       : "fail"
+        ? reader.result.toString().replace("data:", "").replace(/^.+,/, "")
+        : "fail"
 
-       resolve(result)
+      resolve(result)
     }
-      
+
     reader.onerror = (error) => reject(error)
   })
 }
@@ -111,7 +111,7 @@ export const addCommentOnImage = async (
 
 const postRequest = (url: string, body: unknown): Promise<Response> => {
   console.log(JSON.stringify(body))
-  
+
   return send(url, {
     method: "POST",
     headers: { "content-type": "application/json" },

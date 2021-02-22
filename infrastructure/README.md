@@ -29,6 +29,8 @@ az deployment group show \
 
 ## Deploy the web page
 
+1. Make sure your backend is deployed.
+1. Edit the `src/environment.ts` file to include the URL to your backend function app.
 1. Run `yarn build` to create a production build
 1. Right-click the `build` output folder in VS Code and select `Deploy to static website via Azure Storage`
 1. Select the storage account that you created in the infrastructure step
