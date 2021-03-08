@@ -1,10 +1,10 @@
 import React from "react"
-import UploadImage from "./components/UploadImage"
-import { Container, Row, Col } from "react-bootstrap"
+import { Col, Container, Row } from "react-bootstrap"
+import { BrowserRouter, Link, Route, Switch } from "react-router-dom"
 import DisplayThumbnails from "./components/DisplayThumbnails"
-import { BrowserRouter, Switch, Route, Link } from "react-router-dom"
-import ViewImage from "./components/ViewImage"
 import ThisComponentIsAJoke from "./components/Joke"
+import UploadImage from "./components/UploadImage"
+import ViewImage from "./components/ViewImage"
 
 const App: React.FC = () => {
   return (

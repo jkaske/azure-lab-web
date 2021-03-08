@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react"
 import {
   Alert,
+  Badge,
+  Button,
   Col,
   Container,
+  Form,
   Image,
   Row,
-  Form,
-  Button,
-  Badge,
 } from "react-bootstrap"
 import { useParams } from "react-router-dom"
-import { Photo, getImageById, addCommentOnImage, Comment } from "../api/backend"
+import { addCommentOnImage, Comment, getImageById, Photo } from "../api/backend"
 
 interface RouteParams {
   photoId: string

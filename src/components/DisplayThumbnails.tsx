@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { Alert, Col, Image, Row } from "react-bootstrap"
 import { Link } from "react-router-dom"
-import { Thumbnail, getThumbnails } from "../api/backend"
+import { getThumbnails, Thumbnail } from "../api/backend"
 
 const DisplayThumbnails: React.FC = () => {
   const [thumbnails, setThumbnails] = useState<Thumbnail[]>([])

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Joke, getJoke } from "../api/backend"
+import { getJoke, Joke } from "../api/backend"
 
 const ThisComponentIsAJoke: React.FC = () => {
   const [joke, setJoke] = useState<Joke>({ text: "Loading a joke ..." })

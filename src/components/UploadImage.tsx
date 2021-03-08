@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { Alert, Button } from "react-bootstrap"
-import { uploadImageAsFile, uploadImageAsBase64 } from "../api/backend"
+import { uploadImageAsBase64, uploadImageAsFile } from "../api/backend"
 
 const UploadImage: React.FC = () => {
   const [file, setFile] = useState<File>()
