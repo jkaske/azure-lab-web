@@ -31,9 +31,25 @@
       }
     }
   },
-  "variables": {
-    "origin": "[concat(parameters('storageAccountName'),'.z16.web.core.windows.net')]"
-  },
+  "functions": [
+    {
+      "namespace": "url",
+      "members": {
+        "makeValidOrigin": {
+          "parameters": [
+            {
+              "name": "url",
+              "type": "string"
+            }
+          ],
+          "output": {
+            "value": "[ substring( substring(parameters('url'), 0, sub(length(parameters('url')), 1)), 8, sub(length(parameters('url')), 9) ) ]",
+            "type": "string"
+          }
+        }
+      }
+    }
+  ],
   "resources": [
     {
       "type": "Microsoft.Storage/storageAccounts",
@@ -63,7 +79,7 @@
       "location": "[parameters('location')]",
       "dependsOn": ["[parameters('cdnProfileName')]"],
       "properties": {
-        "originHostHeader": "[variables('origin')]",
+        "originHostHeader": "[url.makeValidOrigin( reference(parameters('storageAccountName')).primaryEndpoints.web )]",
         "isHttpAllowed": true,
         "isHttpsAllowed": true,
         "queryStringCachingBehavior": "IgnoreQueryString",
@@ -108,7 +124,7 @@
           {
             "name": "origin1",
             "properties": {
-              "hostName": "[variables('origin')]"
+              "hostName": "[url.makeValidOrigin(reference(parameters('storageAccountName')).primaryEndpoints.web)]"
             }
           }
         ]
