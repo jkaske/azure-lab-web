@@ -1,16 +1,7 @@
 import React, { useEffect, useState } from "react"
-import {
-  Alert,
-  Badge,
-  Button,
-  Col,
-  Container,
-  Form,
-  Image,
-  Row,
-} from "react-bootstrap"
+import { Alert, Col, Container, Image, Row } from "react-bootstrap"
 import { useParams } from "react-router-dom"
-import { addCommentOnImage, Comment, getImageById, Photo } from "../api/backend"
+import { getImageById, Photo } from "../api/backend"
 
 interface RouteParams {
   photoId: string
@@ -18,44 +9,18 @@ interface RouteParams {
 
 const EmptyPhoto: Photo = {
   uri: "",
-  comments: [],
 }
 
 const ViewImage: React.FC = () => {
   const { photoId } = useParams<RouteParams>()
   const [photo, setPhoto] = useState<Photo>(EmptyPhoto)
-  const [newComment, setNewComment] = useState("")
-  const [comments, setComments] = useState<Comment[]>([])
   const [showError, setShowError] = useState(false)
-
-  const onAddComment = async (e: React.FormEvent) => {
-    // required to avoid a reload that aborts the request
-    e.preventDefault()
-
-    try {
-      await addCommentOnImage(photoId, newComment)
-      setComments([
-        ...comments,
-        { text: newComment, datetime: new Date().toISOString() },
-      ])
-    } catch (err) {
-      console.error(err)
-      setShowError(true)
-    } finally {
-      setNewComment("")
-    }
-  }
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewComment(e.target.value)
-  }
 
   useEffect(() => {
     const fetchImage = async () => {
       try {
         const p = await getImageById(photoId)
         setPhoto(p)
-        setComments(p.comments.length > 0 ? p.comments : [])
       } catch (err) {
         console.error(err)
       }
@@ -88,38 +53,6 @@ const ViewImage: React.FC = () => {
       <Row className="text-center">
         <Col>
           <Image className="image-class-name w-100" src={photo.uri} />
-        </Col>
-      </Row>
-      <Row className="p-3 mt-5">
-        <Col>
-          <h4>Comments</h4>
-          <div className="pt-3">
-            {comments.map((comment, idx) => {
-              return (
-                <Alert key={idx} className="p-3 text-dark" variant="secondary">
-                  <Badge variant="secondary" className="mr-2 p-2">
-                    {comment.datetime}
-                  </Badge>
-                  {comment.text}
-                </Alert>
-              )
-            })}
-          </div>
-        </Col>
-        <Col>
-          <h4>Add a new comment</h4>
-          <Form className="pt-3" onSubmit={onAddComment}>
-            <Form.Group>
-              <Form.Control
-                placeholder="Enter your comment ..."
-                type="text"
-                onChange={handleChange}
-              />
-            </Form.Group>
-            <Button variant="primary" type="submit" size="lg" block>
-              Submit comment
-            </Button>
-          </Form>
         </Col>
       </Row>
     </Container>

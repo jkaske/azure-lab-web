@@ -7,12 +7,6 @@ export interface Thumbnail {
 
 export interface Photo {
   uri: string
-  comments: Comment[]
-}
-
-export interface Comment {
-  datetime: string
-  text: string
 }
 
 export interface Joke {
@@ -89,24 +83,6 @@ const file2Base64 = (file: File): Promise<string> => {
 
     reader.onerror = (error) => reject(error)
   })
-}
-
-export const addCommentOnImage = async (
-  imageId: string,
-  comment: string
-): Promise<void> => {
-  const body = {
-    text: comment,
-  }
-
-  const res = await postRequest(
-    `${environment.baseUrl}/images/${imageId}/comments`,
-    body
-  )
-
-  if (res.status !== 201) {
-    throw new Error("Could not fetch image details")
-  }
 }
 
 const postRequest = (url: string, body: unknown): Promise<Response> => {

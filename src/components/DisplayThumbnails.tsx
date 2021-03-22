@@ -30,8 +30,7 @@ const DisplayThumbnails: React.FC = () => {
     <div className="p-5 mb-2 bg-light text-dark">
       <h2>My photos</h2>
       <p className="fw-lighter">
-        Click on a photo to view larger size and read comments. Reload page to
-        update list.
+        Click on a photo to view larger size. Reload page to update list.
       </p>
       <Row>
         <Col className="text-center">
