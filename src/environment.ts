@@ -3,7 +3,7 @@ export interface Environment {
 }
 
 const prod: Environment = {
-  baseUrl: "TODO: Please enter API URL",
+  baseUrl: "https://azure-101-c4geoszltmpyw.azurewebsites.net",
 }
 
 export const environment: Environment = prod

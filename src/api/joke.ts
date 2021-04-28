@@ -1,0 +1,31 @@
+import { environment } from "../environment"
+import { getRequest } from "./backend"
+
+export interface Joke {
+  text: string
+}
+
+export class JokeNotFoundError extends Error {}
+export class JokeContentTypeError extends Error {}
+export class JokeResponseBodyError extends Error {}
+
+export const getJoke = async (): Promise<Joke> => {
+  const res = await getRequest(`${environment.baseUrl}/joke`)
+
+  if (res.status === 404) {
+    throw new JokeNotFoundError()
+  }
+
+  const contentType = res.headers.get("content-type") ?? ""
+  if (!contentType.includes("application/json")) {
+    throw new JokeContentTypeError()
+  }
+
+  const body = await res.json()
+
+  if (!body.text) {
+    throw new JokeResponseBodyError()
+  }
+
+  return body
+}

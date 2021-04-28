@@ -9,21 +9,6 @@ export interface Photo {
   uri: string
 }
 
-export interface Joke {
-  text: string
-}
-
-export const getJoke = async (): Promise<Joke> => {
-  const res = await getRequest(`${environment.baseUrl}/joke`)
-
-  if (res.status !== 200) {
-    throw new Error("Could not get joke (no pun intended)")
-  }
-
-  const body = await res.json()
-  return body
-}
-
 export const getThumbnails = async (): Promise<Thumbnail[]> => {
   const res = await getRequest(`${environment.baseUrl}/thumbnails`)
 
@@ -103,7 +88,7 @@ const postImageRequest = (url: string, body: File): Promise<Response> => {
   })
 }
 
-const getRequest = (url: string): Promise<Response> => {
+export const getRequest = (url: string): Promise<Response> => {
   return send(url, { method: "GET" })
 }
 
