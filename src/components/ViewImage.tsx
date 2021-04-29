@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from "react"
-import { Alert, Col, Container, Image, Row } from "react-bootstrap"
+import {
+  Alert,
+  Col,
+  Container,
+  Image as ImageComponent,
+  Row,
+} from "react-bootstrap"
 import { useParams } from "react-router-dom"
-import { getImageById, Photo } from "../api/backend"
+import { getImageById, Image } from "../api/images"
+import noImageAvailable from "../assets/noimageavailable.jpg"
 
 interface RouteParams {
   photoId: string
 }
 
-const EmptyPhoto: Photo = {
-  uri: "",
-}
-
 const ViewImage: React.FC = () => {
   const { photoId } = useParams<RouteParams>()
-  const [photo, setPhoto] = useState<Photo>(EmptyPhoto)
+  const [photo, setPhoto] = useState<Image>()
   const [showError, setShowError] = useState(false)
 
   useEffect(() => {
@@ -52,7 +55,17 @@ const ViewImage: React.FC = () => {
       </Row>
       <Row className="text-center">
         <Col>
-          <Image className="image-class-name w-100" src={photo.uri} />
+          {photo?.uri ? (
+            <ImageComponent
+              className="image-class-name w-100"
+              src={photo.uri}
+            />
+          ) : (
+            <ImageComponent
+              className="image-class-name w-100"
+              src={noImageAvailable}
+            />
+          )}
         </Col>
       </Row>
     </Container>

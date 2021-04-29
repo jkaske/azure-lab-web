@@ -1,15 +1,21 @@
 import React, { useState } from "react"
 import { Alert, Button } from "react-bootstrap"
-import { uploadImageAsBase64, uploadImageAsFile } from "../api/backend"
+import { CORSError } from "../api/http"
+import {
+  PostImageNotFoundError,
+  uploadImageAsBase64,
+  uploadImageAsFile,
+} from "../api/images"
+import { environment } from "../environment"
+import CORSErrorComponent from "./errors/CorsError"
 
 const UploadImage: React.FC = () => {
   const [file, setFile] = useState<File>()
   const [uploadAsBase64, setUploadAsBase64] = useState<boolean>(false)
-  const [showError, setShowError] = useState(false)
+  const [error, setError] = useState<React.FC>()
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // required to avoid a reload that aborts the request
-    event.preventDefault()
+    event.preventDefault() // required to avoid a reload that aborts the request
 
     if (event.target.files && event.target.files.length > 0) {
       setFile(event.target.files[0])
@@ -17,8 +23,7 @@ const UploadImage: React.FC = () => {
   }
 
   const handleClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
-    // required to avoid a reload that aborts the request
-    event.preventDefault()
+    event.preventDefault() // required to avoid a reload that aborts the request
 
     if (file) {
       try {
@@ -27,30 +32,20 @@ const UploadImage: React.FC = () => {
         } else {
           await uploadImageAsFile(file)
         }
-        setShowError(false)
       } catch (err) {
-        console.log(err)
-        setShowError(true)
+        if (err instanceof PostImageNotFoundError) {
+          setError(NotFoundErrorComponent)
+        }
+        if (err instanceof CORSError) {
+          setError(CORSErrorComponent)
+        }
       }
     }
   }
 
   return (
     <div className="p-5 mb-2 bg-light text-dark">
-      <div>
-        {showError && (
-          <>
-            <Alert
-              variant="danger"
-              onClose={() => setShowError(false)}
-              dismissible
-            >
-              <Alert.Heading>Oh snap! Could not upload photo!</Alert.Heading>
-              <p>Have you implemented the POST /images backend function?</p>
-            </Alert>
-          </>
-        )}
-      </div>
+      <div>{error && error}</div>
       <div className="input-group">
         <div className="custom-file">
           <input
@@ -89,6 +84,31 @@ const UploadImage: React.FC = () => {
         </Button>
       </div>
     </div>
+  )
+}
+
+const NotFoundErrorComponent: React.FC = () => {
+  return (
+    <>
+      <Alert variant="danger">
+        <Alert.Heading>
+          Oh snap! The POST <strong>/images</strong> route was not found (HTTP
+          404).
+        </Alert.Heading>
+        <ul>
+          <li>Make sure your backend is running</li>
+          <li>
+            Make sure the website is configured with the correct backend,
+            currently it is configured to go to{" "}
+            <strong>{environment.baseUrl}</strong>
+          </li>
+          <li>
+            Make sure your POST /images function is exposed under the correct
+            route (i.e. /images, not /api/images)
+          </li>
+        </ul>
+      </Alert>
+    </>
   )
 }
 

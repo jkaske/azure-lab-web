@@ -1,7 +1,7 @@
 import React from "react"
 import { Col, Container, Row } from "react-bootstrap"
 import { BrowserRouter, Link, Route, Switch } from "react-router-dom"
-import DisplayThumbnails from "./components/DisplayThumbnails"
+import DisplayAllImages from "./components/DisplayAllImages"
 import ThisComponentIsAJoke from "./components/Joke"
 import UploadImage from "./components/UploadImage"
 import ViewImage from "./components/ViewImage"
@@ -33,7 +33,7 @@ const App: React.FC = () => {
             </Row>
             <Row>
               <Col>
-                <DisplayThumbnails />
+                <DisplayAllImages />
               </Col>
             </Row>
           </Route>

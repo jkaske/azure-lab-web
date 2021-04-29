@@ -1,5 +1,5 @@
 import { environment } from "../environment"
-import { getRequest } from "./backend"
+import { getRequest } from "./http"
 
 export interface Joke {
   text: string

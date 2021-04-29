@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Alert } from "react-bootstrap"
+import { CORSError } from "../api/http"
 import {
   getJoke,
   Joke,
@@ -7,17 +8,27 @@ import {
   JokeNotFoundError,
   JokeResponseBodyError,
 } from "../api/joke"
+import { environment } from "../environment"
+import CORSErrorComponent from "./errors/CorsError"
 
 const NotFoundErrorComponent: React.FC = () => {
   return (
     <>
       <Alert variant="danger">
         <Alert.Heading>
-          Oh snap! The <strong>/joke</strong> route was not found (HTTP 404).
+          Oh snap! The GET <strong>/joke</strong> route was not found (HTTP
+          404).
         </Alert.Heading>
         <ul>
           <li>Make sure your backend is running</li>
+          <li>Make sure that you have implemented the GET /joke function!</li>
+          <li>
+            Make sure the website is configured with the correct backend,
+            currently it is configured to go to{" "}
+            <strong>{environment.baseUrl}</strong>
+          </li>
           <li>Make sure your joke function is exposed under the /joke route</li>
+          <li>Finally, make sure you joke is funny!</li>
         </ul>
       </Alert>
     </>
@@ -77,6 +88,9 @@ const ThisComponentIsAJoke: React.FC = () => {
         }
         if (err instanceof JokeContentTypeError) {
           setError(ContentTypeErrorComponent)
+        }
+        if (err instanceof CORSError) {
+          setError(CORSErrorComponent)
         }
       }
     }

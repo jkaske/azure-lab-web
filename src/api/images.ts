@@ -1,12 +1,28 @@
 import { environment } from "../environment"
+import { getRequest, postImageRequest, postRequest } from "./http"
 
 export interface Thumbnail {
   id: string
   uri: string
 }
 
-export interface Photo {
+export interface Image {
+  id: string
   uri: string
+  thumbnail?: string
+}
+
+export class ImagesRouteNotFoundError extends Error {}
+
+export const getImages = async (): Promise<Image[]> => {
+  const res = await getRequest(`${environment.baseUrl}/images`)
+
+  if (res.status === 404) {
+    throw new ImagesRouteNotFoundError()
+  }
+
+  const body = await res.json()
+  return body
 }
 
 export const getThumbnails = async (): Promise<Thumbnail[]> => {
@@ -20,20 +36,39 @@ export const getThumbnails = async (): Promise<Thumbnail[]> => {
   return body
 }
 
-export const getImageById = async (imageId: string): Promise<Photo> => {
+export class GetImageIdNotFoundError extends Error {}
+export class GetImageIdResponseBodyError extends Error {}
+export class GetImageIdContentTypeError extends Error {}
+
+export const getImageById = async (imageId: string): Promise<Image> => {
   const res = await getRequest(`${environment.baseUrl}/images/${imageId}`)
 
-  if (res.status !== 200) {
-    throw new Error("Could not fetch image details")
+  if (res.status === 404) {
+    throw new GetImageIdNotFoundError()
+  }
+
+  const contentType = res.headers.get("content-type") ?? ""
+  if (!contentType.includes("application/json")) {
+    throw new GetImageIdContentTypeError()
   }
 
   const body = await res.json()
 
+  if (!body.id || !body.uri) {
+    throw new GetImageIdResponseBodyError()
+  }
+
   return body
 }
 
+export class PostImageNotFoundError extends Error {}
+
 export const uploadImageAsFile = async (file: File): Promise<void> => {
   const res = await postImageRequest(`${environment.baseUrl}/images`, file)
+
+  if (res.status === 404) {
+    throw new PostImageNotFoundError()
+  }
 
   if (res.status !== 201) {
     throw new Error("Could not upload image")
@@ -68,39 +103,4 @@ const file2Base64 = (file: File): Promise<string> => {
 
     reader.onerror = (error) => reject(error)
   })
-}
-
-const postRequest = (url: string, body: unknown): Promise<Response> => {
-  console.log(JSON.stringify(body))
-
-  return send(url, {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify(body),
-  })
-}
-
-const postImageRequest = (url: string, body: File): Promise<Response> => {
-  return send(url, {
-    method: "POST",
-    headers: { "content-type": "application/octet-stream" },
-    body,
-  })
-}
-
-export const getRequest = (url: string): Promise<Response> => {
-  return send(url, { method: "GET" })
-}
-
-const send = async (url: string, init: RequestInit): Promise<Response> => {
-  const setHeaders = () => {
-    init.headers = {
-      ...init.headers,
-      "access-control-allow-origin": "*",
-    }
-  }
-
-  setHeaders()
-
-  return await fetch(url, init)
 }
