@@ -1,5 +1,5 @@
 import { environment } from "../environment"
-import { getRequest, postImageRequest, postRequest } from "./http"
+import { getRequest, postImageRequest, postRequest, UnknownError } from "./http"
 
 export interface Thumbnail {
   id: string
@@ -62,6 +62,7 @@ export const getImageById = async (imageId: string): Promise<Image> => {
 }
 
 export class PostImageNotFoundError extends Error {}
+export class PostImageInternalServerError extends Error {}
 
 export const uploadImageAsFile = async (file: File): Promise<void> => {
   const res = await postImageRequest(`${environment.baseUrl}/images`, file)
@@ -70,8 +71,12 @@ export const uploadImageAsFile = async (file: File): Promise<void> => {
     throw new PostImageNotFoundError()
   }
 
+  if (res.status === 500) {
+    throw new PostImageInternalServerError()
+  }
+
   if (res.status !== 201) {
-    throw new Error("Could not upload image")
+    throw new UnknownError()
   }
 }
 

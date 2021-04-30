@@ -1,4 +1,5 @@
 export class CORSError extends Error {}
+export class UnknownError extends Error {}
 
 export const postRequest = (url: string, body: unknown): Promise<Response> => {
   console.log(JSON.stringify(body))

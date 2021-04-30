@@ -30,7 +30,7 @@ const DisplayAllImages: React.FC = () => {
 
     const interval = setInterval(() => {
       fetchImages()
-    }, 5000)
+    }, 60000)
 
     return () => clearInterval(interval)
   }, [])
