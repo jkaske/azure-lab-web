@@ -1,11 +1,6 @@
 import { environment } from "../environment"
 import { getRequest, postImageRequest, postRequest, UnknownError } from "./http"
 
-export interface Thumbnail {
-  id: string
-  uri: string
-}
-
 export interface Image {
   id: string
   uri: string
@@ -19,17 +14,6 @@ export const getImages = async (): Promise<Image[]> => {
 
   if (res.status === 404) {
     throw new ImagesRouteNotFoundError()
-  }
-
-  const body = await res.json()
-  return body
-}
-
-export const getThumbnails = async (): Promise<Thumbnail[]> => {
-  const res = await getRequest(`${environment.baseUrl}/thumbnails`)
-
-  if (res.status !== 200) {
-    throw new Error("Could not get thumbnails")
   }
 
   const body = await res.json()
