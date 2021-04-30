@@ -5,7 +5,7 @@ const GetImageIdResponseBodyErrorComponent: React.FC = () => {
   return (
     <ErrorBase heading="The response body returned from GET /images/&#x0007B;id&#x0007D; is not right.">
       <p>
-        Make sure your joke function returns a response body similar to the
+        Make sure your function returns a response body similar to the
         following:
       </p>
       <pre>

@@ -7,16 +7,28 @@ export interface Image {
   thumbnail?: string
 }
 
-export class ImagesRouteNotFoundError extends Error {}
+export class GetImagesNotFoundError extends Error {}
+export class GetImagesResponseBodyError extends Error {}
+export class GetImagesContentTypeError extends Error {}
 
 export const getImages = async (): Promise<Image[]> => {
   const res = await getRequest(`${environment.baseUrl}/images`)
 
   if (res.status === 404) {
-    throw new ImagesRouteNotFoundError()
+    throw new GetImagesNotFoundError()
+  }
+
+  const contentType = res.headers.get("content-type") ?? ""
+  if (!contentType.includes("application/json")) {
+    throw new GetImageIdContentTypeError()
   }
 
   const body = await res.json()
+
+  if (!(body.get(0) instanceof Image)) {
+    throw new GetImagesResponseBodyError()
+  }
+
   return body
 }
 

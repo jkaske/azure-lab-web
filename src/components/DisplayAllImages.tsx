@@ -2,9 +2,15 @@ import React, { useEffect, useState } from "react"
 import { Col, Figure, Row } from "react-bootstrap"
 import { Link } from "react-router-dom"
 import { CORSError } from "../api/http"
-import { getImages, Image, ImagesRouteNotFoundError } from "../api/images"
+import {
+  getImages,
+  GetImagesNotFoundError,
+  GetImagesResponseBodyError,
+  Image,
+} from "../api/images"
 import CORSErrorComponent from "./errors/CorsError"
 import GetImagesNotFoundErrorComponent from "./errors/GetImagesNotFoundError"
+import GetImagesResponseBodyErrorComponent from "./errors/GetImagesResponseBodyError"
 
 const DisplayAllImages: React.FC = () => {
   const [images, setImages] = useState<Image[]>([])
@@ -16,10 +22,11 @@ const DisplayAllImages: React.FC = () => {
         const images = await getImages()
         setImages(images)
       } catch (err) {
-        if (err instanceof ImagesRouteNotFoundError) {
+        if (err instanceof GetImagesNotFoundError) {
           setError(GetImagesNotFoundErrorComponent)
-        }
-        if (err instanceof CORSError) {
+        } else if (err instanceof GetImagesResponseBodyError) {
+          setError(GetImagesResponseBodyErrorComponent)
+        } else if (err instanceof CORSError) {
           setError(CORSErrorComponent)
         }
       }
