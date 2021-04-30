@@ -4,8 +4,8 @@ import { Button, Form } from "react-bootstrap"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { CORSError } from "../api/http"
 import {
-  PostImageInternalServerError,
-  PostImageNotFoundError,
+  PostImagesInternalServerError,
+  PostImagesNotFoundError,
   uploadImageAsBase64,
   uploadImageAsFile,
 } from "../api/images"
@@ -39,9 +39,9 @@ const UploadImage: React.FC = () => {
           await uploadImageAsFile(file)
         }
       } catch (err) {
-        if (err instanceof PostImageNotFoundError) {
+        if (err instanceof PostImagesNotFoundError) {
           setError(PostImagesNotFoundErrorComponent)
-        } else if (err instanceof PostImageInternalServerError) {
+        } else if (err instanceof PostImagesInternalServerError) {
           setError(PostImagesInternalServerErrorComponent)
         } else if (err instanceof CORSError) {
           setError(CORSErrorComponent)

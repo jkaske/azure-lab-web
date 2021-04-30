@@ -1,6 +1,6 @@
 import React from "react"
 import { Alert, Col, Container, Image, Row } from "react-bootstrap"
-import clippy from "../../assets/clippy.png"
+import clippy from "../../assets/angryclippy.png"
 
 interface Props {
   heading: string
@@ -14,7 +14,7 @@ const ErrorBase: React.FC<Props> = (props: Props) => {
       <Container fluid>
         <Row>
           <Col xs={2}>
-            <Image className="image-class-name p-1" src={clippy} width="110" />
+            <Image className="image-class-name p-1" src={clippy} width="80" />
           </Col>
           <Col>{props.children}</Col>
         </Row>

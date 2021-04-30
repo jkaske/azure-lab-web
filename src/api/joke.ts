@@ -10,7 +10,7 @@ export class JokeContentTypeError extends Error {}
 export class JokeResponseBodyError extends Error {}
 
 export const getJoke = async (): Promise<Joke> => {
-  const res = await getRequest(`${environment.baseUrl}/joke`)
+  const res = await getRequest(`${environment.baseUrl}/jokke`)
 
   if (res.status === 404) {
     throw new JokeNotFoundError()
