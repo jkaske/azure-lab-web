@@ -41,10 +41,14 @@ export class GetImageIdResponseBodyError extends Error {}
 export class GetImageIdContentTypeError extends Error {}
 
 export const getImageById = async (imageId: string): Promise<Image> => {
-  const res = await getRequest(`${environment.baseUrl}/images/${imageId}`)
+  const res = await getRequest(`${environment.baseUrl}/imagess/${imageId}`)
 
   if (res.status === 404) {
     throw new GetImageIdNotFoundError()
+  }
+
+  if (res.status === 500) {
+    throw new UnknownError()
   }
 
   const contentType = res.headers.get("content-type") ?? ""

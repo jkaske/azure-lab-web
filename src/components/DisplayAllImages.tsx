@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react"
-import { Alert, Col, Figure, Row } from "react-bootstrap"
+import { Col, Figure, Row } from "react-bootstrap"
 import { Link } from "react-router-dom"
 import { CORSError } from "../api/http"
 import { getImages, Image, ImagesRouteNotFoundError } from "../api/images"
-import { environment } from "../environment"
 import CORSErrorComponent from "./errors/CorsError"
+import GetImagesNotFoundErrorComponent from "./errors/GetImagesNotFoundError"
 
 const DisplayAllImages: React.FC = () => {
   const [images, setImages] = useState<Image[]>([])
@@ -17,12 +17,11 @@ const DisplayAllImages: React.FC = () => {
         setImages(images)
       } catch (err) {
         if (err instanceof ImagesRouteNotFoundError) {
-          setError(ImagesRouteNotFoundComponent)
+          setError(GetImagesNotFoundErrorComponent)
         }
         if (err instanceof CORSError) {
           setError(CORSErrorComponent)
         }
-        console.error(err)
       }
     }
 
@@ -30,7 +29,7 @@ const DisplayAllImages: React.FC = () => {
 
     const interval = setInterval(() => {
       fetchImages()
-    }, 60000)
+    }, 5000)
 
     return () => clearInterval(interval)
   }, [])
@@ -64,32 +63,6 @@ const DisplayAllImages: React.FC = () => {
         )}
       </Row>
     </div>
-  )
-}
-
-const ImagesRouteNotFoundComponent: React.FC = () => {
-  return (
-    <>
-      <Alert variant="danger">
-        <Alert.Heading>
-          Oh snap! The GET <strong>/images</strong> route was not found (HTTP
-          404).
-        </Alert.Heading>
-        <ul>
-          <li>Make sure your backend is running</li>
-          <li>Make sure that you have implemented the GET /images function!</li>
-          <li>
-            Make sure the website is configured with the correct backend,
-            currently it is configured to go to{" "}
-            <strong>{environment.baseUrl}</strong>
-          </li>
-          <li>
-            Make sure your GET /images function is exposed under the correct
-            route (i.e. /images, not /api/images)
-          </li>
-        </ul>
-      </Alert>
-    </>
   )
 }
 

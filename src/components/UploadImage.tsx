@@ -1,6 +1,6 @@
 import bsCustomFileInput from "bs-custom-file-input"
 import React, { useEffect, useState } from "react"
-import { Alert, Button, Form } from "react-bootstrap"
+import { Button, Form } from "react-bootstrap"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { CORSError } from "../api/http"
 import {
@@ -9,8 +9,9 @@ import {
   uploadImageAsBase64,
   uploadImageAsFile,
 } from "../api/images"
-import { environment } from "../environment"
 import CORSErrorComponent from "./errors/CorsError"
+import PostImagesInternalServerErrorComponent from "./errors/PostImagesInternalServerError"
+import PostImagesNotFoundErrorComponent from "./errors/PostImagesNotFoundError"
 import UnknownErrorComponent from "./errors/UnknownError"
 
 type FormValues = {
@@ -39,9 +40,9 @@ const UploadImage: React.FC = () => {
         }
       } catch (err) {
         if (err instanceof PostImageNotFoundError) {
-          setError(NotFoundErrorComponent)
+          setError(PostImagesNotFoundErrorComponent)
         } else if (err instanceof PostImageInternalServerError) {
-          setError(InternalServerErrorComponent)
+          setError(PostImagesInternalServerErrorComponent)
         } else if (err instanceof CORSError) {
           setError(CORSErrorComponent)
         } else {
@@ -53,6 +54,7 @@ const UploadImage: React.FC = () => {
 
   return (
     <div className="p-5 mb-2 bg-light text-dark">
+      {error}
       <Form>
         <Form.File id="myfile" custom>
           <Form.File.Input {...register("fileList")} />
@@ -76,47 +78,6 @@ const UploadImage: React.FC = () => {
         </Button>
       </Form>
     </div>
-  )
-}
-
-const NotFoundErrorComponent: React.FC = () => {
-  return (
-    <Alert variant="danger">
-      <Alert.Heading>
-        Oh snap! The POST <strong>/images</strong> route was not found (HTTP
-        404).
-      </Alert.Heading>
-      <ul>
-        <li>Make sure your backend is running</li>
-        <li>
-          Make sure the website is configured with the correct backend,
-          currently it is configured to go to{" "}
-          <strong>{environment.baseUrl}</strong>
-        </li>
-        <li>
-          Make sure your POST /images function is exposed under the correct
-          route (i.e. /images, not /api/images)
-        </li>
-      </ul>
-    </Alert>
-  )
-}
-
-const InternalServerErrorComponent: React.FC = () => {
-  return (
-    <Alert variant="danger">
-      <Alert.Heading>Oh snap! Internal Server Error (500)</Alert.Heading>
-      <ul>
-        <li>
-          If your backend expects to receive the raw image bytes, make sure to{" "}
-          <strong>not</strong> check the checkbox in this form
-        </li>
-        <li>
-          If your backend expects a base64 encoded image, make sure the checkbox
-          in this form is checked
-        </li>
-      </ul>
-    </Alert>
   )
 }
 

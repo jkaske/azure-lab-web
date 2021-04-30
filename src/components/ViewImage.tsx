@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react"
-import {
-  Alert,
-  Col,
-  Container,
-  Image as ImageComponent,
-  Row,
-} from "react-bootstrap"
+import { Col, Container, Image as ImageComponent, Row } from "react-bootstrap"
 import { useParams } from "react-router-dom"
-import { getImageById, Image } from "../api/images"
+import {
+  getImageById,
+  GetImageIdContentTypeError,
+  GetImageIdNotFoundError,
+  GetImageIdResponseBodyError,
+  Image,
+} from "../api/images"
 import noImageAvailable from "../assets/noimageavailable.jpg"
+import GetImageIdContentTypeErrorComponent from "./errors/GetImageIdContentTypeError"
+import GetImageIdNotFoundErrorComponent from "./errors/GetImageIdNotFoundError"
+import GetImageIdResponseBodyErrorComponent from "./errors/GetImageIdResponseBodyError"
+import GetImageIdUnknownErrorComponent from "./errors/GetImageIdUnknownError"
 
 interface RouteParams {
   photoId: string
@@ -17,7 +21,7 @@ interface RouteParams {
 const ViewImage: React.FC = () => {
   const { photoId } = useParams<RouteParams>()
   const [photo, setPhoto] = useState<Image>()
-  const [showError, setShowError] = useState(false)
+  const [error, setError] = useState<React.FC>()
 
   useEffect(() => {
     const fetchImage = async () => {
@@ -25,7 +29,15 @@ const ViewImage: React.FC = () => {
         const p = await getImageById(photoId)
         setPhoto(p)
       } catch (err) {
-        console.error(err)
+        if (err instanceof GetImageIdNotFoundError) {
+          setError(GetImageIdNotFoundErrorComponent)
+        } else if (err instanceof GetImageIdContentTypeError) {
+          setError(GetImageIdContentTypeErrorComponent)
+        } else if (err instanceof GetImageIdResponseBodyError) {
+          setError(GetImageIdResponseBodyErrorComponent)
+        } else {
+          setError(GetImageIdUnknownErrorComponent)
+        }
       }
     }
     fetchImage()
@@ -33,24 +45,14 @@ const ViewImage: React.FC = () => {
 
   return (
     <Container className="p-5 mb-2 bg-light text-dark">
+      {error ?? (
+        <Row>
+          <Col>{error}</Col>
+        </Row>
+      )}
       <Row className="text-center">
         <Col>
           <h3>{photoId}</h3>
-          {showError && (
-            <>
-              <Alert
-                variant="danger"
-                onClose={() => setShowError(false)}
-                dismissible
-              >
-                <Alert.Heading>Oh snap! Could not fetch photo!</Alert.Heading>
-                <p>
-                  Have you implemented the GET /photo/id function? Maybe the
-                  photo does not exist in your storage?
-                </p>
-              </Alert>
-            </>
-          )}
         </Col>
       </Row>
       <Row className="text-center">
