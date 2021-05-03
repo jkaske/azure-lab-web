@@ -45,7 +45,7 @@ export class GetImageIdResponseBodyError extends Error {}
 export class GetImageIdContentTypeError extends Error {}
 
 export const getImageById = async (imageId: string): Promise<Image> => {
-  const res = await getRequest(`${environment.baseUrl}/imagess/${imageId}`)
+  const res = await getRequest(`${environment.baseUrl}/images/${imageId}`)
 
   if (res.status === 404) {
     throw new GetImageIdNotFoundError()
@@ -106,7 +106,6 @@ export const uploadImageAsBase64 = async (file: File): Promise<void> => {
   }
 
   if (res.status !== 201) {
-    console.log("here", res.status)
     throw new UnknownError()
   }
 }
