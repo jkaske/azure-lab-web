@@ -29,11 +29,11 @@ export const getImages = async (): Promise<Image[]> => {
     throw new GetImagesResponseBodyError()
   }
 
-  const success = body.every((image) => {
+  const isResponseValid = body.every((image) => {
     return image.id && image.uri
   })
 
-  if (!success) {
+  if (!isResponseValid) {
     throw new GetImagesResponseBodyError()
   }
 
