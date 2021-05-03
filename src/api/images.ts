@@ -25,7 +25,15 @@ export const getImages = async (): Promise<Image[]> => {
 
   const body = await res.json()
 
-  if (!(body.get(0) instanceof Image)) {
+  if (!Array.isArray(body)) {
+    throw new GetImagesResponseBodyError()
+  }
+
+  const success = body.every((image) => {
+    return image.id && image.uri
+  })
+
+  if (!success) {
     throw new GetImagesResponseBodyError()
   }
 
