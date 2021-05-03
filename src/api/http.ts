@@ -46,5 +46,5 @@ const send = async (url: string, init: RequestInit): Promise<Response> => {
     }
   }
 
-  return await fetch(url, init)
+  return res
 }
