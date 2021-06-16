@@ -1,0 +1,23 @@
+{
+  "extends": ["config:base", ":prHourlyLimitNone"],
+  "assignees": [
+    "@bjorn-edlund",
+    "@mattias-fjellstrom",
+    "@mattias-kindborg-at-work"
+  ],
+  "labels": ["dependencies"],
+  "packageRules": [
+    {
+      "updateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": true
+    },
+    {
+      "matchPackagePatterns": ["^@types/react"],
+      "groupName": "React types"
+    }
+  ],
+  "rebaseWhen": "behind-base-branch",
+  "vulnerabilityAlerts": {
+    "labels": ["security"]
+  }
+}
