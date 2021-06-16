@@ -1,5 +1,7 @@
 # Welcome to "My Photo Album"!
 
+[![CI](https://github.com/bjorn-edlund/azure-101-web/actions/workflows/ci.yml/badge.svg)](https://github.com/bjorn-edlund/azure-101-web/actions/workflows/ci.yml)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## What you need to know
