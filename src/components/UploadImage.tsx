@@ -6,12 +6,14 @@ import { CORSError } from "../api/http"
 import {
   PostImagesInternalServerError,
   PostImagesNotFoundError,
+  PostImagesResponseCodeError,
   uploadImageAsBase64,
   uploadImageAsFile,
 } from "../api/images"
 import CORSErrorComponent from "./errors/CorsError"
 import PostImagesInternalServerErrorComponent from "./errors/PostImagesInternalServerError"
 import PostImagesNotFoundErrorComponent from "./errors/PostImagesNotFoundError"
+import PostImagesResponseCodeErrorComponent from "./errors/PostImagesResponseCodeError"
 import UnknownErrorComponent from "./errors/UnknownError"
 
 type FormValues = {
@@ -45,6 +47,8 @@ const UploadImage: React.FC = () => {
           setError(PostImagesInternalServerErrorComponent)
         } else if (err instanceof CORSError) {
           setError(CORSErrorComponent)
+        } else if (err instanceof PostImagesResponseCodeError) {
+          setError(PostImagesResponseCodeErrorComponent)
         } else {
           setError(UnknownErrorComponent)
         }

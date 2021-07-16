@@ -71,6 +71,7 @@ export const getImageById = async (imageId: string): Promise<Image> => {
 
 export class PostImagesNotFoundError extends Error {}
 export class PostImagesInternalServerError extends Error {}
+export class PostImagesResponseCodeError extends Error {}
 
 export const uploadImageAsFile = async (file: File): Promise<void> => {
   const res = await postImageRequest(`${environment.baseUrl}/images`, file)
@@ -84,6 +85,10 @@ export const uploadImageAsFile = async (file: File): Promise<void> => {
   }
 
   if (res.status !== 201) {
+    throw new PostImagesResponseCodeError()
+  }
+
+  if (res.status !== 201 && res.status !== 404 && res.status !== 500) {
     throw new UnknownError()
   }
 }
@@ -106,6 +111,10 @@ export const uploadImageAsBase64 = async (file: File): Promise<void> => {
   }
 
   if (res.status !== 201) {
+    throw new PostImagesResponseCodeError()
+  }
+
+  if (res.status !== 201 && res.status !== 404 && res.status !== 500) {
     throw new UnknownError()
   }
 }
