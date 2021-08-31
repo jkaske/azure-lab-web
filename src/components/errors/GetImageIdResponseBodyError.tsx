@@ -12,8 +12,7 @@ const GetImageIdResponseBodyErrorComponent: React.FC = () => {
         {JSON.stringify(
           {
             id: "<image id>",
-            uri:
-              "https://<account>.blob.core.windows.net/images/<image id>.jpg",
+            uri: "https://<account>.blob.core.windows.net/images/<image id>.jpg",
           },
           null,
           2
