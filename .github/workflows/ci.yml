@@ -19,7 +19,7 @@ jobs:
       - run: npm run build
       - name: Upload to blob storage
         uses: azure/CLI@v1
-          with:
+        with:
           azcliversion: 2.0.72
           inlineScript: |
               az storage blob upload-batch --account-name <STORAGE_ACCOUNT_NAME>  --auth-mode key -d '$web' -s ./build
