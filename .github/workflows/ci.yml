@@ -10,7 +10,7 @@ jobs:
       - run: echo "Doing some actions ✨"
       - uses: actions/checkout@v2
       - uses: azure/login@v1
-      with:
+        with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - uses: actions/setup-node@v2
         with:
@@ -22,7 +22,7 @@ jobs:
         with:
           azcliversion: 2.0.72
           inlineScript: |
-              az storage blob upload-batch --account-name <STORAGE_ACCOUNT_NAME>  --auth-mode key -d '$web' -s ./build
+            az storage blob upload-batch --account-name <STORAGE_ACCOUNT_NAME>  --auth-mode key -d '$web' -s ./build
       - name: Purge CDN endpoint
         uses: azure/CLI@v1
         with:
@@ -31,5 +31,5 @@ jobs:
             az cdn endpoint purge --content-paths  "/*" --profile-name "CDN_PROFILE_NAME" --name "CDN_ENDPOINT" --resource-group "RESOURCE_GROUP"
       - name: logout
         run: |
-              az logout
+          az logout
         if: always()
