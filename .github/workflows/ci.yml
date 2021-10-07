@@ -9,8 +9,27 @@ jobs:
     steps:
       - run: echo "Doing some actions ✨"
       - uses: actions/checkout@v2
+      - uses: azure/login@v1
+      with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
       - uses: actions/setup-node@v2
         with:
           node-version: 14.x
       - run: npm i
       - run: npm run build
+      - name: Upload to blob storage
+        uses: azure/CLI@v1
+          with:
+          azcliversion: 2.0.72
+          inlineScript: |
+              az storage blob upload-batch --account-name <STORAGE_ACCOUNT_NAME>  --auth-mode key -d '$web' -s ./build
+      - name: Purge CDN endpoint
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.0.72
+          inlineScript: |
+            az cdn endpoint purge --content-paths  "/*" --profile-name "CDN_PROFILE_NAME" --name "CDN_ENDPOINT" --resource-group "RESOURCE_GROUP"
+      - name: logout
+        run: |
+              az logout
+        if: always()
